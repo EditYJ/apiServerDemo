@@ -5,9 +5,9 @@ import (
 	"apiServerDemo/router"
 	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/lexkong/log"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"log"
 	"net/http"
 	"time"
 )
@@ -46,11 +46,11 @@ func main() {
 		if err := pingServer(); err != nil {
 			log.Fatal("路由处理无响应，或者处理花的时间过长，请检查问题...", err)
 		}
-		log.Print("启动自检完成...路由部署配置成功!")
+		log.Info("启动自检完成...路由部署配置成功!")
 	}()
 
-	log.Printf("开始监听网络请求，监听地址:%s", viper.GetString("addr"))
-	log.Print(http.ListenAndServe(viper.GetString("addr"), g).Error())
+	log.Infof("开始监听网络请求，监听地址:%s", viper.GetString("addr"))
+	log.Info(http.ListenAndServe(viper.GetString("addr"), g).Error())
 }
 
 // 该函数用来ping服务器的http服务，确保路由是正常工作的
@@ -62,7 +62,7 @@ func pingServer() error {
 		if err == nil && resp.StatusCode == 200 {
 			return nil
 		}
-		log.Print("等待路由服务..., 1秒后重试...")
+		log.Info("等待路由服务..., 1秒后重试...")
 		time.Sleep(time.Second)
 	}
 	return errors.New("不能连接到路由服务，请检查服务器状态...")
