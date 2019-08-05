@@ -1,0 +1,6 @@
+run_mode: debug               # 开发模式 debug, release, test
+
+addr: :8077                   # HTTP绑定端口
+name: apiserver               # API Server的名字
+url: http://127.0.0.1:8077    # pingServer函数请求的API服务器的ip:port
+max_ping_count: 4             # pingServer函数try的次数
