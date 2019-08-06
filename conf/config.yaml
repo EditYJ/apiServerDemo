@@ -22,3 +22,16 @@ log:
   log_rotate_date: 1
   log_rotate_size: 1
   log_backup_count: 7
+
+# 数据库
+gormlog: true
+db:
+  username: root
+  password: root
+  addr: localhost:3306
+  name: testcli
+docker_db:
+  username: root
+  password: root
+  addr: localhost:3306
+  name: testdocker

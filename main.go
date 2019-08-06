@@ -2,6 +2,7 @@ package main
 
 import (
 	"apiServerDemo/config"
+	"apiServerDemo/model"
 	"apiServerDemo/router"
 	"errors"
 	"github.com/gin-gonic/gin"
@@ -23,6 +24,10 @@ func main() {
 	if err := config.Init(*cfg); err != nil {
 		panic(err)
 	}
+
+	// 初始化数据库连接
+	model.DB.Init()
+	defer model.DB.Close()
 
 	// 设置Gin的模式
 	gin.SetMode(viper.GetString("run_mode"))
