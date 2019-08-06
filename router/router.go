@@ -3,6 +3,7 @@ package router
 
 import (
 	"apiServerDemo/handler/sd"
+	"apiServerDemo/handler/user"
 	"apiServerDemo/router/middleware"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -33,5 +34,10 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		svcd.GET("/ram", sd.RAMCheck)
 	}
 
+	// 用户相关
+	u := g.Group("/v1/user")
+	{
+		u.POST("", user.Create)
+	}
 	return g
 }
