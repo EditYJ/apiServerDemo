@@ -29,7 +29,7 @@ db:
   username: root
   password: root
   addr: localhost:3306
-  name: testcli
+  name: db_apiserver
 docker_db:
   username: root
   password: root

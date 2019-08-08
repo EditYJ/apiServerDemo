@@ -12,13 +12,18 @@ package errno
 
 // 定义错误代码
 var (
-	// 1000
 	// 一般错误
 	OK                  = &Errno{Code: 0, Message: "OK"}
-	InternalServerError = &Errno{Code: 100001, Message: "内部服务出错！"}
-	ErrBind             = &Errno{Code: 100002, Message: "将请求体绑定到结构体时发生错误。请求数据结构有误"}
+	InternalServerError = &Errno{Code: 10001, Message: "内部服务出错！"}
+	ErrBind             = &Errno{Code: 10002, Message: "将请求体绑定到结构体时发生错误。请求数据结构有误"}
 
-	// 2001
+	ErrValidation = &Errno{Code: 20001, Message: "验证失败！"}
+	ErrDatabase   = &Errno{Code: 20002, Message: "数据库发生错误！"}
+	ErrToken      = &Errno{Code: 20003, Message: "在签名JSON web token的时候发生错误！"}
+
 	// 用户操作错误
-	ErrUserNotFound = &Errno{Code: 200101, Message: "无法找到此用户！"}
+	ErrEncrypt           = &Errno{Code: 20101, Message: "加密用户密码的时候发生错误！"}
+	ErrUserNotFound      = &Errno{Code: 20102, Message: "无法找到此用户！"}
+	ErrTokenInvalid      = &Errno{Code: 20103, Message: "token无效！"}
+	ErrPasswordIncorrect = &Errno{Code: 20104, Message: "密码错误！"}
 )

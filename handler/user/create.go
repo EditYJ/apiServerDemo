@@ -2,13 +2,16 @@ package user
 
 import (
 	. "apiServerDemo/handler"
+	"apiServerDemo/model"
 	"apiServerDemo/pkg/errno"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/lexkong/log"
+	"time"
 )
 
+// 创建用户
 func Create(c *gin.Context) {
+	log.Info("创建用户函数[Create()]被调用.")
 	var r CreateRequest
 
 	// 检查 Content-Type 类型，将消息体作为指定的格式解析到 Go struct 变量中。
@@ -19,50 +22,36 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	// [Param(key)]返回 URL的参数值
-	// 例：
-	//  router.GET("/user/:id", func(c *gin.Context) {     // a GET request to /user/john
-	//     id := c.Param("id") // id == "john"
-	// })
-	admin2 := c.Param("username")
-	log.Infof("URL username: %s", admin2)
+	u := model.UserModel{
+		BaseModel: model.BaseModel{
+			Id:       0,
+			CreateAt: time.Now(),
+			UpdateAt: time.Now(),
+			DeleteAt: nil,
+		},
+		Username:  r.Username,
+		Password:  r.Password,
+	}
 
-	// [Query(key)]返回URL中的地址参数
-	// 例：
-	//  GET /path?id=1234&name=Manu&value=
-	//  c.Query("id") == "1234"
-	//  c.Query("name") == "Manu"
-	//  c.Query("value") == ""
-	//  c.Query("wtf") == ""
-	desc := c.Query("desc")
-	log.Infof("URL key param desc: %s", desc)
-
-	// [GetHeader(key)]获取 HTTP 头
-	//
-	// 拓展：DefaultQuery()：类似 Query()，但是如果 key 不存在，会返回默认值。
-	// 例如：
-	// GET /?name=Manu&lastname=
-	// c.DefaultQuery("name", "unknown") == "Manu"
-	// c.DefaultQuery("id", "none") == "none"
-	// c.DefaultQuery("lastname", "none") == ""
-	contentType := c.GetHeader("Content-Type")
-	log.Infof("Header Content-Type: %s", contentType)
-
-	log.Debugf("username is: [%s], password is: [%s]", r.Username, r.Password)
-
-	if r.Username == "" {
-		err := errno.New(errno.ErrUserNotFound, fmt.Errorf("Username can not be NULL")).Add("用户名不能为空！")
-		SendResponse(c, err, nil)
+	// 验证数据
+	if err := u.Validate();err != nil{
+		SendResponse(c, errno.ErrValidation, nil)
 		return
 	}
 
-	if r.Password == "" {
-		err := fmt.Errorf("password is empty")
-		SendResponse(c, err, nil)
+	// 加密用户密码
+	if err:= u.Encrypt(); err!= nil{
+		SendResponse(c, errno.ErrEncrypt, nil)
+		return
 	}
 
-	rsp:=CreateResponse{Username:r.Username}
+	// 将用户信息插入表
+	if err := u.Create();err != nil{
+		SendResponse(c, errno.ErrDatabase, nil)
+		return
+	}
 
-	// 返回用户名信息
+	// 构建返回信息，返回用户名信息
+	rsp := CreateResponse{Username:r.Username}
 	SendResponse(c, nil, rsp)
 }

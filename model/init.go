@@ -19,12 +19,11 @@ var DB *Datebase
 
 // 打开数据库连接
 func openDB(username, password, addr, name string) *gorm.DB {
-	config := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s",
+	config := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=true&loc=%s",
 		username,
 		password,
 		addr,
 		name,
-		true,
 		// "Asia/Shanghai")
 		"Local")
 	db, err := gorm.Open("mysql", config)
