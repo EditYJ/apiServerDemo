@@ -4,6 +4,7 @@ import (
 	"apiServerDemo/config"
 	"apiServerDemo/model"
 	"apiServerDemo/router"
+	"apiServerDemo/router/middleware"
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/lexkong/log"
@@ -36,7 +37,10 @@ func main() {
 	g := gin.New()
 
 	//中间件拓展
-	middlewares := []gin.HandlerFunc{}
+	middlewares := []gin.HandlerFunc{
+		middleware.RequestId(),
+		middleware.Logging(),
+	}
 
 	// Routes
 	router.Load(
