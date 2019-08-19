@@ -40,6 +40,7 @@ func main() {
 	middlewares := []gin.HandlerFunc{
 		middleware.RequestId(),
 		middleware.Logging(),
+
 	}
 
 	// Routes

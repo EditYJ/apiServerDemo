@@ -36,12 +36,14 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 
 	// 用户相关
 	u := g.Group("/v1/user")
+	u.Use(middleware.AuthMiddleware())
 	{
 		u.POST("", user.Create)				// 创建账号
 		u.DELETE("/:id", user.Delete)	// 删除账号
 		u.PUT("/:id", user.Update)		// 更新账号
 		u.GET("", user.List)					// 账号列表
 		u.GET("/:username", user.Get)	// 获取指定账号的详细信息
+		u.POST("/login", user.Login)	// 用户登录
 	}
 	return g
 }
